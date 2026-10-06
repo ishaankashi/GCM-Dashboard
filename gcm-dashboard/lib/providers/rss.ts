@@ -4,7 +4,7 @@ const tag=(x:string,t:string)=>{const m=x.match(new RegExp(`<${t}[^>]*>([\\s\\S]
 export class RssNewsProvider implements NewsProvider{
  constructor(private feeds:FeedCfg[]){}
  async getNews():Promise<NewsItem[]>{
-  const res=await Promise.allSettled(this.feeds.map(async f=>{
+  const res=await Promise.allSettled(this.feeds.map(async (f):Promise<NewsItem[]>=>{
    const r=await fetch(f.url,{next:{revalidate:600},headers:{'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15','Accept':'application/rss+xml, application/xml, text/xml, */*'}});if(!r.ok)throw new Error(`${f.url} -> HTTP ${r.status}`);
    const xml=await r.text();
    return xml.split(/<item[ >]/).slice(1).map(it=>({id:tag(it,'link')||tag(it,'guid'),timestamp:(d=>isNaN(+d)?'':d.toISOString())(new Date(tag(it,'pubDate'))),headline:tag(it,'title'),category:f.category,source:f.source,url:tag(it,'link')})).filter(n=>n.headline&&n.timestamp);
