@@ -1,0 +1,6 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+body{background:#060b16;color:#fff;font-family:Inter,system-ui,sans-serif}
+html.present{font-size:125%}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.marquee{animation:marquee 60s linear infinite}.marquee:hover{animation-play-state:paused}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}.fade{animation:fade .35s ease}
